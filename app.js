@@ -34,21 +34,35 @@ const item3 = new Item({
 const defaultItems = [item1, item2, item3];
 
 app.get("/", function (req, res) {
-  Item.find({}, function (err, foundItems) {
+  async function myitems() {
+    const foundItems = await Item.find({});
+
     if (foundItems.length === 0) {
-      Item.insertMany(defaultItems, function (err) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log("Successfully savevd default items to DB.");
-        }
-      });
+      Item.insertMany(defaultItems);
       res.redirect("/");
     } else {
-      res.render("list", { listTitle: "Today", newListItems: foundItems });
+      res.render("list", { listTitle: "Today", newlistItems: foundItems });
     }
-  });
+  }
+  myitems();
 });
+
+// app.get("/", function (req, res) {
+//   Item.find({}, function (err, foundItems) {
+//     if (foundItems.length === 0) {
+//       Item.insertMany(defaultItems, function (err) {
+//         if (err) {
+//           console.log(err);
+//         } else {
+//           console.log("Successfully savevd default items to DB.");
+//         }
+//       });
+//       res.redirect("/");
+//     } else {
+//       res.render("list", { listTitle: "Today", newListItems: foundItems });
+//     }
+//   });
+// });
 
 // app.get("/", function (req, res) {
 //   Item.find({})
@@ -62,7 +76,7 @@ app.get("/", function (req, res) {
 //             console.log(error); // Failure
 //           });
 //       }
-//       // res.redirect("/");
+//       res.redirect("/");
 //     })
 //     .catch(function () {
 //       res.render("list", { listTitle: "Today", newListItems: foundItems });
