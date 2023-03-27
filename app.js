@@ -41,7 +41,7 @@ app.get("/", function (req, res) {
       Item.insertMany(defaultItems);
       res.redirect("/");
     } else {
-      res.render("list", { listTitle: "Today", newlistItems: foundItems });
+      res.render("list", { listTitle: "Today", listItems: foundItems });
     }
   }
   myitems();
