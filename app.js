@@ -1,9 +1,7 @@
-//jshint esversion:6
-
 const express = require("express");
 const bodyParser = require("body-parser");
-
 const mongoose = require("mongoose");
+
 const app = express();
 
 app.set("view engine", "ejs");
@@ -28,10 +26,20 @@ const item2 = new Item({
   name: "Hit the + button to add a new item.",
 });
 const item3 = new Item({
-  name: "<-- HIt this to delete an item.",
+  name: "< Hit this to delete an item.",
 });
 
 const defaultItems = [item1, item2, item3];
+
+// Item.insertMany(defaultItems)
+//   .then(() => console.log("Successfully saved default items to DB."))
+//   .catch((err) => console.log(err));
+
+// app.get("/", function (req, res) {
+//   Item.find({}).then((foundItems) =>
+//     res.render("list", { listTitle: "Today", newListItems: foundItems })
+//   );
+// });
 
 app.get("/", function (req, res) {
   async function myitems() {
@@ -41,47 +49,11 @@ app.get("/", function (req, res) {
       Item.insertMany(defaultItems);
       res.redirect("/");
     } else {
-      res.render("list", { listTitle: "Today", listItems: foundItems });
+      res.render("list", { listTitle: "Today", newListItems: foundItems });
     }
   }
   myitems();
 });
-
-// app.get("/", function (req, res) {
-//   Item.find({}, function (err, foundItems) {
-//     if (foundItems.length === 0) {
-//       Item.insertMany(defaultItems, function (err) {
-//         if (err) {
-//           console.log(err);
-//         } else {
-//           console.log("Successfully savevd default items to DB.");
-//         }
-//       });
-//       res.redirect("/");
-//     } else {
-//       res.render("list", { listTitle: "Today", newListItems: foundItems });
-//     }
-//   });
-// });
-
-// app.get("/", function (req, res) {
-//   Item.find({})
-//     .then(function (foundItems) {
-//       if (foundItems.length == 0) {
-//         Item.insertMany(defaultItems)
-//           .then(function () {
-//             console.log("Data inserted"); // Success
-//           })
-//           .catch(function (error) {
-//             console.log(error); // Failure
-//           });
-//       }
-//       res.redirect("/");
-//     })
-//     .catch(function () {
-//       res.render("list", { listTitle: "Today", newListItems: foundItems });
-//     });
-// });
 
 app.post("/", function (req, res) {
   const item = req.body.newItem;
